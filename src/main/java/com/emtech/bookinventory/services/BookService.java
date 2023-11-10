@@ -128,6 +128,15 @@ public class BookService {
         try {
             bookEntity.setStatus("pending");
 
+            Optional<BookEntity> existingBook = bookRepository.findByTitle(bookEntity.getTitle());
+
+            if (existingBook.isPresent()){
+                res.setMessage("Book already exists");
+                restResponse.setBody(res);
+                return ResponseEntity.status(304).body(restResponse);
+            }
+
+
             BookEntity newBookEntity = bookRepository.save(bookEntity);
 
             res.setMessage("book added successfully");

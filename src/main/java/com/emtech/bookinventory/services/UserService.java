@@ -43,7 +43,7 @@ public class UserService {
                         .role(Role.USER)
                         .build();
                 userRepository.save(newUser);
-                var jwtToken = jwtService.generateToken((UserDetails) newUser);
+                var jwtToken = jwtService.generateToken(newUser);
                 response.put("message", "Account created successfully for "+newUser.getFullName());
                 response.put("status", true);
                 response.put("token", jwtToken);
