@@ -74,7 +74,7 @@ public class UserService {
                 log.info("....invalid credentials...");
             }
             else {
-                var jwtToken = jwtService.generateToken((UserDetails) user.get());
+                var jwtToken = jwtService.generateToken((UserEntity) user.get());
                 response.put("message", "login successful");
                 response.put("status", true);
                 response.put("token", jwtToken);

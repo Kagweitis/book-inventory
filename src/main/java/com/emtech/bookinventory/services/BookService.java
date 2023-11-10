@@ -27,7 +27,8 @@ public class BookService {
         ResponseObject res = new ResponseObject();
 
         try{
-            List<Book> bookList = new ArrayList<>();
+            log.info("getting books");
+            List<BookEntity> bookList = bookRepository.findAll();
 
             if (bookList.isEmpty()) {
                 res.setMessage("No books found");
@@ -35,6 +36,8 @@ public class BookService {
                 return ResponseEntity.status(204).body(restResponse);
             }
 
+            res.setPayload(bookList);
+            restResponse.setBody(res);
             return ResponseEntity.status(200).body(restResponse);
 
         } catch (Exception e){
@@ -48,21 +51,24 @@ public class BookService {
 
         RestResponse restResponse = new RestResponse();
         ResponseObject res = new ResponseObject();
-        Optional<BookEntity> oldBookData = bookRepository.findById(id);
+
         try {
-        if (oldBookData.isPresent()) {
-            BookEntity updatedData = oldBookData.get();
-            updatedData.setTitle(bookEntity.getTitle());
-            updatedData.setAuthor(bookEntity.getAuthor());
-            BookEntity bookObj = bookRepository.save(updatedData);
-            res.setMessage("successfully changed book info");
-            res.setPayload(bookObj);
-            restResponse.setBody(res);
-            return ResponseEntity.status(200).body(restResponse);
+            Optional<BookEntity> oldBookData = bookRepository.findById(id);
+            if (oldBookData.isPresent()) {
+                BookEntity updatedData = oldBookData.get();
+                updatedData.setTitle(bookEntity.getTitle());
+                updatedData.setAuthor(bookEntity.getAuthor());
+                BookEntity bookObj = bookRepository.save(updatedData);
+                res.setMessage("successfully changed book info");
+                res.setPayload(bookObj);
+                restResponse.setBody(res);
+                return ResponseEntity.status(200).body(restResponse);
 
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        res.setMessage("not found");
+        restResponse.setBody(res);
+        return ResponseEntity.status(404).body(restResponse);
 
     } catch (Exception e){
             log.error(e.getMessage());
@@ -152,6 +158,27 @@ public class BookService {
         }
     }
 
+    public ResponseEntity<RestResponse> updateStatus(Long id){
+        RestResponse restResponse = new RestResponse();
+        ResponseObject res = new ResponseObject();
+
+        try {
+            Optional<BookEntity> bookOptional = bookRepository.findById(id);
+
+            if (bookOptional.isPresent()){
+               bookOptional.get().setStatus("Verified");
+               res.setMessage("verified successfully");
+                restResponse.setBody(res);
+                restResponse.setStatus(HttpStatus.OK);
+            }
+            return ResponseEntity.status(200).body(restResponse);
+        } catch (Exception e){
+            log.error(e.getMessage());
+            res.setMessage("an error occured");
+            restResponse.setBody(res);
+            return ResponseEntity.status(500).body(restResponse);
+        }
+    }
 
 
 

@@ -1,8 +1,11 @@
 package com.emtech.bookinventory.config;
 
+import com.emtech.bookinventory.entities.UserEntity;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@Slf4j
 public class JwtService {
 
     private static final String SECRET_KEY="3373367639792F423F4528482B4D6251655468576D5A7134743777217A254326";
@@ -41,15 +45,20 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserEntity userEntity){
+        return generateToken(new HashMap<>(), userEntity);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
+    public String generateToken(Map<String, Object> extraClaims, UserEntity userEntity){
+        Gson gson = new Gson();
+        log.info(gson.toJson(userEntity));
+        Map<String,Object> claims = new HashMap<>();
+        claims.put("username",userEntity.getEmail());
+        claims.put("email",userEntity.getEmail());
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userEntity.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
                 .signWith(SignatureAlgorithm.HS256, getSigningKey())
