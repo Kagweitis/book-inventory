@@ -167,6 +167,8 @@ public class BookService {
 
             if (bookOptional.isPresent()){
                bookOptional.get().setStatus("Verified");
+               log.info("verification status " + bookOptional.get().getStatus());
+               bookRepository.save(bookOptional.get());
                res.setMessage("verified successfully");
                 restResponse.setBody(res);
                 restResponse.setStatus(HttpStatus.OK);
