@@ -17,8 +17,8 @@ public class BooksController {
 
 //    @PreAuthorize("hasRole('USER')")
     @GetMapping("get-books")
-    public ResponseEntity<RestResponse> getAllBooks(){
-        return bookService.getAllBooks();
+    public ResponseEntity<RestResponse> getAllBooks(String isbn){
+        return bookService.getAllBooks(isbn);
     }
 
 //    @PreAuthorize("hasRole('USER')")

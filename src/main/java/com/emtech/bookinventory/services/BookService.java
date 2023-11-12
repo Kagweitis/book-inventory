@@ -22,13 +22,13 @@ public class BookService {
 
     private final BookRepo bookRepository;
 
-    public ResponseEntity<RestResponse> getAllBooks(){
+    public ResponseEntity<RestResponse> getAllBooks(String isbn){
         RestResponse restResponse = new RestResponse();
         ResponseObject res = new ResponseObject();
 
         try{
             log.info("getting books");
-            List<BookEntity> bookList = bookRepository.findAll();
+            List<BookEntity> bookList = bookRepository.findByDeletedFalse(isbn);
 
             if (bookList.isEmpty()) {
                 res.setMessage("No books found");
