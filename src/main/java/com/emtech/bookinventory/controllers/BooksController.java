@@ -22,26 +22,26 @@ public class BooksController {
         return bookService.getAllBooks();
     }
 
-//    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("update/{id}")
     public ResponseEntity<RestResponse> updateBook(@PathVariable Long id, @RequestBody BookEntity bookEntity){
         return bookService.updateBook(id, bookEntity);
     }
 
-//    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("delete/{id}")
     public ResponseEntity<RestResponse> deleteBook(@PathVariable Long id){
         return bookService.deleteBook(id);
     }
 
-//    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("status/{id}")
     public ResponseEntity<RestResponse> trackStatus(@PathVariable Long id){
         return bookService.trackStatus(id);
     }
 
 
-//    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("add-book")
     public ResponseEntity<RestResponse> addBook(@RequestBody BookEntity bookEntity){
         return bookService.addBook(bookEntity);
