@@ -12,7 +12,9 @@ public interface BookRepo extends JpaRepository<BookEntity, Long> {
 
     Optional<BookEntity> findByTitle(String title);
 
-    List<BookEntity> findByDeletedFalse(String isbn);
+    List<BookEntity> findByDeletedFalse();
+
+    Optional<BookEntity> findByIsbn(String isbn);
 
 
 }

@@ -22,13 +22,14 @@ public class BookService {
 
     private final BookRepo bookRepository;
 
-    public ResponseEntity<RestResponse> getAllBooks(String isbn){
+    public ResponseEntity<RestResponse> getAllBooks(){
         RestResponse restResponse = new RestResponse();
         ResponseObject res = new ResponseObject();
+        log.info("above try block");
 
         try{
             log.info("getting books");
-            List<BookEntity> bookList = bookRepository.findByDeletedFalse(isbn);
+            List<BookEntity> bookList = bookRepository.findByDeletedFalse();
 
             if (bookList.isEmpty()) {
                 res.setMessage("No books found");
@@ -38,12 +39,12 @@ public class BookService {
 
             res.setPayload(bookList);
             restResponse.setBody(res);
-            return ResponseEntity.status(200).body(restResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(restResponse);
 
         } catch (Exception e){
             log.error(e.getMessage());
             restResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            return ResponseEntity.status(500).body(restResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restResponse);
         }
     }
 
@@ -62,19 +63,19 @@ public class BookService {
                 res.setMessage("successfully changed book info");
                 res.setPayload(bookObj);
                 restResponse.setBody(res);
-                return ResponseEntity.status(200).body(restResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(restResponse);
 
         }
 
         res.setMessage("not found");
         restResponse.setBody(res);
-        return ResponseEntity.status(404).body(restResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(restResponse);
 
     } catch (Exception e){
             log.error(e.getMessage());
             res.setMessage("an error occured");
             restResponse.setBody(res);
-            return ResponseEntity.status(500).body(restResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restResponse);
 
         }
     }
@@ -89,20 +90,22 @@ public class BookService {
             Optional<BookEntity> bookOptional = bookRepository.findById(id);
 
             if (bookOptional.isPresent()) {
+                log.info("book is present");
                 bookOptional.get().setDeleted(true);
                 bookRepository.save(bookOptional.get());
-                return new ResponseEntity<>(HttpStatus.OK);
+                res.setMessage("book deleted successfully");
+                restResponse.setBody(res);
+                return ResponseEntity.status(HttpStatus.OK).body(restResponse);
             } else {
                 res.setMessage("Not found");
-                restResponse.setStatus(HttpStatus.NOT_FOUND);
                 restResponse.setBody(res);
-                return ResponseEntity.status(404).body(restResponse);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(restResponse);
             }
         } catch (Exception e){
             log.error(e.getMessage());
             res.setMessage("an error occured");
             restResponse.setBody(res);
-            return ResponseEntity.status(500).body(restResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restResponse);
         }
     }
 
@@ -119,12 +122,12 @@ public class BookService {
                 restResponse.setBody(res);
                 restResponse.setStatus(HttpStatus.OK);
             }
-            return ResponseEntity.status(200).body(restResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(restResponse);
         } catch (Exception e){
             log.error(e.getMessage());
             res.setMessage("an error occured");
             restResponse.setBody(res);
-            return ResponseEntity.status(500).body(restResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restResponse);
         }
     }
 
@@ -135,27 +138,26 @@ public class BookService {
         try {
             bookEntity.setStatus("pending");
 
-            Optional<BookEntity> existingBook = bookRepository.findByTitle(bookEntity.getTitle());
+            Optional<BookEntity> existingBook = bookRepository.findByIsbn(bookEntity.getIsbn());
+
 
             if (existingBook.isPresent()){
-                res.setMessage("Book already exists");
+                log.info("book exists");
+                res.setMessage("Book with that ISBN already exists");
                 restResponse.setBody(res);
-                return ResponseEntity.status(304).body(restResponse);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(restResponse);
             }
-
-
-            BookEntity newBookEntity = bookRepository.save(bookEntity);
-
+            bookRepository.save(bookEntity);
             res.setMessage("book added successfully");
             restResponse.setBody(res);
             restResponse.setStatus(HttpStatus.OK);
-            return ResponseEntity.status(200).body(restResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(restResponse);
 
         } catch (Exception e){
             log.error(e.getMessage());
             res.setMessage("an error occured");
             restResponse.setBody(res);
-            return ResponseEntity.status(500).body(restResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restResponse);
         }
     }
 
@@ -174,12 +176,12 @@ public class BookService {
                 restResponse.setBody(res);
                 restResponse.setStatus(HttpStatus.OK);
             }
-            return ResponseEntity.status(200).body(restResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(restResponse);
         } catch (Exception e){
             log.error(e.getMessage());
             res.setMessage("an error occured");
             restResponse.setBody(res);
-            return ResponseEntity.status(500).body(restResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restResponse);
         }
     }
 

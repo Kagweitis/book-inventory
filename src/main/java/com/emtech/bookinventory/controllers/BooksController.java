@@ -4,6 +4,7 @@ import com.emtech.bookinventory.dto.RestResponse;
 import com.emtech.bookinventory.entities.BookEntity;
 import com.emtech.bookinventory.services.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +18,8 @@ public class BooksController {
 
 //    @PreAuthorize("hasRole('USER')")
     @GetMapping("get-books")
-    public ResponseEntity<RestResponse> getAllBooks(String isbn){
-        return bookService.getAllBooks(isbn);
+    public ResponseEntity<RestResponse> getAllBooks(){
+        return bookService.getAllBooks();
     }
 
 //    @PreAuthorize("hasRole('USER')")
@@ -41,7 +42,7 @@ public class BooksController {
 
 
 //    @PreAuthorize("hasRole('USER')")
-    @PostMapping("/add-book")
+    @PostMapping("add-book")
     public ResponseEntity<RestResponse> addBook(@RequestBody BookEntity bookEntity){
         return bookService.addBook(bookEntity);
     }
