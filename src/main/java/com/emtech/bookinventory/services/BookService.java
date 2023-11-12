@@ -89,7 +89,8 @@ public class BookService {
             Optional<BookEntity> bookOptional = bookRepository.findById(id);
 
             if (bookOptional.isPresent()) {
-                bookRepository.deleteById(id);
+                bookOptional.get().setDeleted(true);
+                bookRepository.save(bookOptional.get());
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 res.setMessage("Not found");
