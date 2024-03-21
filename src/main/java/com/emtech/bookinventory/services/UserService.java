@@ -31,7 +31,7 @@ public class UserService {
         try {
             Optional<UserEntity> existingUser = userRepository.findByEmail(params.get("email").toString());
             if (existingUser.isPresent()){
-                response.put("message", "user already exist");
+                response.put("message", "This user already exist");
                 response.put("status", false);
             }
             else {
