@@ -32,7 +32,7 @@ public class BookService {
             List<BookEntity> bookList = bookRepository.findByDeletedFalse();
 
             if (bookList.isEmpty()) {
-                res.setMessage("No books found");
+                res.setMessage("No books have been found!");
                 restResponse.setBody(res);
                 return ResponseEntity.status(204).body(restResponse);
             }
