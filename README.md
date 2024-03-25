@@ -17,7 +17,7 @@ http://localhost:8081/swagger-ui/index.html#/
 - Delete a book
 - Get a list of all books
 - Track the status of a book
-- Change Status of a Book
+- Change Status of a Book to deleted
 
 ## Technologies Used
 
