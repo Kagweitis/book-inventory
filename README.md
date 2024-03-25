@@ -26,6 +26,7 @@ http://localhost:8081/swagger-ui/index.html#/
 - Spring Data JPA
 - MySQL
 - JSON Web Tokens (JWT)
+- Jenkins for CICD
 
 ## Getting Started
 
