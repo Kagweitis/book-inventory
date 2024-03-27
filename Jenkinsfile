@@ -1,25 +1,19 @@
 pipeline {
-    agent any
-    
+    agent any 
     stages {
-        stage('Checkout') {
+        stage('Build') { 
             steps {
-                // Checkout the source code from the repository
-                git 'https://github.com/Kagweitis/book-inventory.git'
+                // 
             }
         }
-        
-        stage('Build') {
+        stage('Test') { 
             steps {
-                // Use Maven to build the Spring Boot application
-                sh 'mvn clean package'
+                // 
             }
         }
-        
-        stage('Test') {
+        stage('Deploy') { 
             steps {
-                // Run tests if needed
-                sh 'mvn test'
+                // 
             }
         }
     }
